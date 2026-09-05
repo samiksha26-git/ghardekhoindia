@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghar Dekho India - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- ANIMATION KEYFRAMES --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background-color: #0f2043;
+            color: #ffffff;
+            padding: 14px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand h1 {
+            font-size: 22px;
+            font-weight: 700;
+            transition: transform 0.3s ease;
+        }
+
+        .brand h1:hover {
+            transform: scale(1.02);
+        }
+
+        .brand span {
+            color: #28a745;
+        }
+
+        .brand p {
+            font-size: 11px;
+            color: #e0e0e0;
+            font-style: italic;
+        }
+
+        /* Nav Buttons Group */
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background-color: #166088;
+            border-color: #166088;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .nav-btn.logout {
+            background-color: #d9534f;
+            border-color: #d9534f;
+        }
+
+        .nav-btn.logout:hover {
+            background-color: #c9302c;
+            border-color: #c9302c;
+        }
+
+        /* Hero Search Section */
+        .hero {
+            background: linear-gradient(rgba(15, 32, 67, 0.82), rgba(22, 96, 136, 0.82)), 
+                        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+            color: #ffffff;
+            padding: 60px 8% 80px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .hero p {
+            font-size: 15px;
+            color: #e0e0e0;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        /* Search Bar Box */
+        .search-box {
+            background: #ffffff;
+            padding: 16px;
+            border-radius: 12px;
+            max-width: 850px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+            opacity: 0;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-input-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .search-input-group label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #0f2043;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .search-input-group input,
+        .search-input-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            background-color: #fff;
+            color: #333;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .search-input-group input:focus,
+        .search-input-group select:focus {
+            border-color: #166088;
+            box-shadow: 0 0 0 3px rgba(22, 96, 136, 0.15);
+        }
+
+        .search-btn {
+            background-color: #166088;
+            color: #ffffff;
+            border: none;
+            padding: 0 28px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            align-self: flex-end;
+            height: 42px;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background-color: #0f2043;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 32, 67, 0.3);
+        }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Property Listings Section */
+        .section-container {
+            padding: 50px 8%;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #0f2043;
+            margin-bottom: 6px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .property-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .property-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .property-card:hover .property-img {
+            transform: scale(1.05);
+        }
+
+        .property-info {
+            padding: 16px;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #166088;
+            margin-bottom: 4px;
+        }
+
+        .price span {
+            font-size: 12px;
+            color: #777;
+            font-weight: normal;
+        }
+
+        .property-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0f2043;
+            margin-bottom: 6px;
+        }
+
+        .location {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 14px;
+        }
+
+        .view-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #f4f7f6;
+            color: #166088;
+            border: 1px solid #166088;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background-color: #166088;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(22, 96, 136, 0.2);
+        }
+
+        /* Features Section (Flash Cards) */
+        .features-section {
+            padding: 50px 8%;
+            background-color: #eef2f5;
+            text-align: center;
+        }
+
+        .features-section h2 {
+            font-size: 26px;
+            color: #0f2043;
+            margin-bottom: 30px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            perspective: 1000px;
+        }
+
+        .feature-card {
+            background-color: transparent;
+            height: 220px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-card:hover .card-inner,
+        .feature-card:focus .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-front {
+            background-color: #ffffff;
+            color: #0f2043;
+            border: 1px solid #e0e0e0;
+        }
+
+        .card-front .icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .card-front .icon {
+            transform: scale(1.15);
+        }
+
+        .card-front h3 {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .card-back {
+            background-color: #166088;
+            color: #ffffff;
+            transform: rotateY(180deg);
+        }
+
+        .card-back p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #f4f7f6;
+        }
+
+        /* Calculator Modal Box */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            width: 400px;
+            max-width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-card {
+            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .modal-card h3 {
+            color: #0f2043;
+            margin-bottom: 8px;
+        }
+
+        .modal-card p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 14px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .calc-input:focus {
+            border-color: #166088;
+        }
+
+        .calc-result {
+            margin-top: 14px;
+            padding: 12px;
+            background: #f4f7f6;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+            color: #166088;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn {
+            background: #ccc;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #bbb;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0f2043;
+            color: #b0b0b0;
+            text-align: center;
+            padding: 20px 8%;
+            margin-top: auto;
+            font-size: 13px;
+        }
+
+        footer p span {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 820px) {
+            .navbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h2 {
+                font-size: 24px;
+            }
+            .search-box {
+                flex-direction: column;
+            }
+            .search-btn {
+                width: 100%;
+                margin-top: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="brand">
+            <h1>Ghar Dekho <span>India</span></h1>
+            <p>"Jaha har ghar lage apana."</p>
+        </div>
+        <nav class="nav-buttons">
+            <a href="index.html" class="nav-btn active"> Dashboard</a>
+            <a href="listing.html" class="nav-btn">Listing</a>
+            <a href="wishlist.html" class="nav-btn">Wishlist</a>
+            <button class="nav-btn" onclick="toggleCalc()">Affordability Calculator</button>
+            <a href="login.html" class="nav-btn logout">Logout</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Find Your Perfect Rental Home</h2>
+        <p>Explore thousands of verified homes across India directly from owners.</p>
+        
+        <form class="search-box" onsubmit="handleSearch(event)">
+            <div class="search-input-group">
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="e.g., Mumbai, Delhi, Bangalore" required>
+            </div>
+            <div class="search-input-group">
+                <label for="locality">Locality / Landmark</label>
+                <input type="text" id="locality" placeholder="e.g., Andheri West, Whitefield">
+            </div>
+            <div class="search-input-group">
+                <label for="bhk">Property Type</label>
+                <select id="bhk">
+                    <option value="any">All BHK Types</option>
+                    <option value="PG">PG</option>
+                    <option value="1bhk">1 BHK</option>
+                    <option value="2bhk">2 BHK</option>
+                    <option value="3bhk">3 BHK</option>
+                    <option value="4bhk">4 BHK</option>
+                    <option value="Villa">Villa</option>
+                </select>
+            </div>
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </section>
+
+    <section class="features-section">
+        <h2>Why Choose GharDekho?</h2>
+        <div class="features-grid">
+            <div class="feature-card" tabindex="0">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">🌆</div>
+                        <h3>Pan-India Tiers Covered</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>From Tier 1 metros like Mumbai to Tier 5 towns and villages, search rental rates anywhere.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" tabindex="0">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">📞</div>
+                        <h3>Direct Owner Contacts</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>No middleman fees. Get direct access to owners' phone numbers instantly.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" tabindex="0">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="icon">👨‍👩‍👧‍👦</div>
+                        <h3>Tenant Preferences</h3>
+                    </div>
+                    <div class="card-back">
+                        <p>Filter easily by Bachelors, Nuclear Families, Joint Families, or Couples.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal-overlay" id="calcModal">
+        <div class="modal-card">
+            <h3>Rent Affordability Calculator</h3>
+            <p>Calculate your ideal monthly budget based on the 30% income rule.</p>
+            
+            <label style="font-size: 12px; font-weight: 600;">Monthly In-Hand Salary (₹)</label>
+            <input type="number" id="monthlyIncome" class="calc-input" placeholder="e.g. 50000" oninput="calculateRent()">
+            
+            <div class="calc-result" id="calcOutput">
+                Enter your income to view recommended rent
+            </div>
+
+            <button class="close-btn" onclick="toggleCalc()">Close</button>
+        </div>
+    </div>
+
+    <footer>
+        <p><span>Ghar Dekho India</span>.| "Jaha har ghar lage apana."</p>
+    </footer>
+
+    <script>
+        function handleSearch(event) {
+            event.preventDefault();
+            const city = document.getElementById('city').value;
+            const locality = document.getElementById('locality').value;
+            alert(`Searching homes in ${city} ${locality ? 'near ' + locality : ''}...`);
+        }
+
+        function toggleCalc() {
+            const modal = document.getElementById('calcModal');
+            modal.classList.toggle('active');
+        }
+
+        function calculateRent() {
+            const income = document.getElementById('monthlyIncome').value;
+            const output = document.getElementById('calcOutput');
+            
+            if (income && income > 0) {
+                const maxRent = Math.round(income * 0.30);
+                output.innerHTML = `Recommended Max Rent:<br><span style="font-size: 20px; color: #28a745;">₹${maxRent.toLocaleString('en-IN')} / month</span>`;
+            } else {
+                output.innerText = 'Enter your income to view recommended rent';
+            }
+        }
+    </script>
+</body>
+</html>

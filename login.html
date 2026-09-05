@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghar Dekho India - Login & Register</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            max-width: 100%;
+            min-height: 580px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        /* Hero Banner Section */
+        .hero-section {
+            flex: 1;
+            background: linear-gradient(rgba(15, 32, 67, 0.8), rgba(22, 96, 136, 0.8)), 
+                        url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+            color: #ffffff;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .brand h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .brand span {
+            color: #fefffe;
+        }
+
+        .tagline {
+            font-size: 13px;
+            color: #e0e0e0;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .hero-text h2 {
+            font-size: 28px;
+            line-height: 1.25;
+            margin-bottom: 10px;
+        }
+
+        .hero-text p {
+            font-size: 14px;
+            color: #dcdcdc;
+            line-height: 1.5;
+        }
+
+        .footer-note {
+            font-size: 12px;
+            color: #b0b0b0;
+        }
+
+        /* Form Section */
+        .form-section {
+            flex: 1;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-box {
+            display: none;
+            width: 100%;
+        }
+
+        .form-box.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-box h3 {
+            font-size: 24px;
+            color: #0f2043;
+            margin-bottom: 6px;
+        }
+
+        .sub-heading {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .input-group select,
+        .input-group input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background-color: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .input-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%38666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            padding-right: 42px;
+        }
+
+        /* Professional Eye Toggle SVG */
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            color: #666;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: #166088;
+        }
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: #166088;
+        }
+
+        .password-hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .form-actions label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .form-actions a {
+            color: #166088;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-actions a:hover {
+            text-decoration: underline;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background-color: #166088;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0f2043;
+        }
+
+        .submit-btn:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+
+        .toggle-text {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        .toggle-text a {
+            color: #166088;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .toggle-text a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            .container {
+                flex-direction: column;
+                min-height: auto;
+                border-radius: 12px;
+            }
+
+            .hero-section {
+                padding: 24px 20px;
+                text-align: center;
+            }
+
+            .hero-text {
+                margin: 16px 0;
+            }
+
+            .hero-text h2 {
+                font-size: 22px;
+            }
+
+            .hero-text p {
+                font-size: 13px;
+            }
+
+            .footer-note {
+                display: none;
+            }
+
+            .form-section {
+                padding: 28px 20px;
+            }
+
+            .form-box h3 {
+                font-size: 21px;
+            }
+        }
+    </style>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="hero-section">
+            <div class="brand">
+                <h1>Ghar Dekho <span>India</span></h1>
+                <p class="tagline">"Jaha har ghar lage apana."</p>
+            </div>
+            <div class="hero-text">
+                <h2>Find Your Perfect Rental Home</h2>
+                <p>Discover verified properties, connect with trusted owners, and move into spaces designed for your comfort.</p>
+            </div>
+            <div class="footer-note">
+             Ghar Dekho India.
+            </div>
+        </div>
+
+        <div class="form-section">
+            
+            <!-- Login Form -->
+            <div class="form-box active" id="loginForm">
+                <h3>Welcome Back</h3>
+                <p class="sub-heading">Please enter your details to sign in</p>
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="login-role">I am a</label>
+                        <select id="login-role" required>
+                            <option value="Tenant / Home Seeker">Tenant / Home Seeker</option>
+                            <option value="Property Owner / Landlord">Property Owner / Landlord</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('login-password', this)" title="Show Password">
+                                <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <label><input type="checkbox"> Remember me</label>
+                        <a onclick="toggleForms('forgotForm')">Forgot password?</a>
+                    </div>
+                    <button type="submit" id="login-btn" class="submit-btn">Sign In</button>
+                </form>
+                <p class="toggle-text">Don't have an account? <a onclick="toggleForms('signupForm')">Sign up</a></p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="form-box" id="signupForm">
+                <h3>Create an Account</h3>
+                <p class="sub-heading">Start your rental journey with us today</p>
+                <form onsubmit="handleSignup(event)">
+                    <div class="input-group">
+                        <label for="signup-role">I want to register as</label>
+                        <select id="signup-role" required>
+                            <option value="Tenant / Home Seeker">Tenant / Home Seeker</option>
+                            <option value="Property Owner / Landlord">Property Owner / Landlord</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="example@mail.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="signup-password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="signup-password" placeholder="Create password" required>
+                            <span class="toggle-password" onclick="togglePasswordVisibility('signup-password', this)" title="Show Password">
+                                <svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                            </span>
+                        </div>
+                        <p class="password-hint">At least 8 characters: letters, numbers, and a special character (!@#$%^&*).</p>
+                    </div>
+                    <button type="submit" id="signup-btn" class="submit-btn">Create Account</button>
+                </form>
+                <p class="toggle-text">Already have an account? <a onclick="toggleForms('loginForm')">Sign in</a></p>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div class="form-box" id="forgotForm">
+                <h3>Reset Password</h3>
+                <p class="sub-heading">Enter your registered email to set a new password</p>
+                <form onsubmit="handleResetPassword(event)">
+                    <div class="input-group">
+                        <label for="reset-email">Registered Email</label>
+                        <input type="email" id="reset-email" placeholder="example@mail.com" required>
+                    </div>
+                    <button type="submit" id="reset-btn" class="submit-btn">Send Reset Link</button>
+                </form>
+                <p class="toggle-text">Remembered your password? <a onclick="toggleForms('loginForm')">Sign in</a></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+        apiKey: "AIzaSyAaSOEh0-Tbu7Fr1NjjCFZ4WLplhsfjYD4",
+        authDomain: "ghardekho-india.firebaseapp.com",
+         projectId: "ghardekho-india",
+        storageBucket: "ghardekho-india.firebasestorage.app",
+        messagingSenderId: "955798868041",
+        appId: "1:955798868041:web:63ccdb60668da5faa66f98",
+         measurementId: "G-5BN4JGBPV5"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const eyeOpenSVG = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+        const eyeClosedSVG = `<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+        function toggleForms(formId) {
+            document.querySelectorAll('.form-box').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(formId).classList.add('active');
+        }
+
+        function togglePasswordVisibility(inputId, container) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                container.innerHTML = eyeOpenSVG;
+                container.setAttribute('title', 'Hide Password');
+            } else {
+                input.type = 'password';
+                container.innerHTML = eyeClosedSVG;
+                container.setAttribute('title', 'Show Password');
+            }
+        }
+
+        function validatePassword(password) {
+            const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+            return regex.test(password);
+        }
+
+        // Helper Function for Redirects based on Role
+        function redirectUser(role) {
+            if (role === 'Property Owner / Landlord') {
+                window.location.href = 'landlord.html';
+            } else {
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function handleSignup(event) {
+    event.preventDefault();
+    const submitBtn = document.getElementById('signup-btn');
+    const role = document.getElementById('signup-role').value;
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim().toLowerCase();
+    const password = document.getElementById('signup-password').value;
+
+    if (!validatePassword(password)) {
+        alert('Password must be at least 8 characters long and include letters, numbers, and at least one special character (!@#$%^&*).');
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Creating Account...";
+
+    try {
+        // 1. Create User in Firebase Auth
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        // 2. Try writing user metadata to Firestore
+        try {
+            await db.collection("users").doc(user.uid).set({
+                name: name,
+                email: email,
+                role: role,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (firestoreError) {
+            console.warn("Firestore write restricted by security rules:", firestoreError);
+        }
+
+        // 3. Sign the user out immediately so they are forced to log in
+        await auth.signOut();
+        localStorage.removeItem('currentUser');
+
+        // 4. Show success message and switch to the Login form
+        alert(`Account created successfully as ${role}! Please sign in with your credentials.`);
+        toggleForms('loginForm');
+
+    } catch (error) {
+        console.error("Sign-up Error:", error);
+        
+        if (error.code === 'auth/operation-not-allowed') {
+            alert('Sign-up Failed: Email/Password authentication is disabled in your Firebase Console.');
+        } else if (error.code === 'auth/email-already-in-use') {
+            alert('Sign-up Failed: This email is already registered. Please sign in instead.');
+        } else if (error.code === 'auth/invalid-email') {
+            alert('Sign-up Failed: Invalid email format.');
+        } else if (error.code === 'auth/weak-password') {
+            alert('Sign-up Failed: Password is too weak.');
+        } else {
+            alert('Sign Up Error: ' + error.message);
+        }
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Create Account";
+    }
+}
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('login-btn');
+            const role = document.getElementById('login-role').value;
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Signing In...";
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const uid = userCredential.user.uid;
+                
+                let userRole = role;
+                let userName = "User";
+
+                try {
+                    const doc = await db.collection("users").doc(uid).get();
+                    if (doc.exists) {
+                        const data = doc.data();
+                        userRole = data.role || role;
+                        userName = data.name || "User";
+                    }
+                } catch (firestoreError) {
+                    console.warn("Firestore read failed, falling back to form selection:", firestoreError);
+                }
+
+                localStorage.setItem('currentUser', JSON.stringify({ name: userName, email: email, role: userRole, uid: uid }));
+                redirectUser(userRole);
+
+            } catch (error) {
+                console.error("Login Error:", error);
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    alert('Login Failed: Invalid email or password. If you do not have an account yet, click "Sign up" below.');
+                } else {
+                    alert('Login Error: ' + error.message);
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Sign In";
+            }
+        }
+
+        function handleResetPassword(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('reset-btn');
+            const email = document.getElementById('reset-email').value.trim().toLowerCase();
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Sending...";
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert('Password reset link sent to your registered email address!');
+                    toggleForms('loginForm');
+                })
+                .catch((error) => {
+                    alert('Error: ' + error.message);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Send Reset Link";
+                });
+        }
+    </script>
+</body>
+</html>
