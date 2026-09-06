@@ -19,8 +19,7 @@ const propertiesData = [
     ownerName: "Ramesh Patil",
     ownerContact: "+91 9820011223",
     images: [
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+      "https://i.pinimg.com/736x/2e/76/b7/2e76b7b352e21747439a3a0d6bec272c.jpg"
     ]
   },
   {
@@ -40,8 +39,7 @@ const propertiesData = [
     ownerName: "Rekha Patil",
     ownerContact: "+91 9820015123",
     images: [
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+      "https://www.getsethome.com/_next/image?url=https%3A%2F%2Fgsh-cdn.sgp1.cdn.digitaloceanspaces.com%2Fassets%2Fimg%2Fno-broker-mumbai%2FPRT964%2Froom-on-rent-in-mumbai%2Fpg-in-santacruz-west_1751110632.jpg&w=3840&q=75",
     ]
   },
   {
@@ -61,8 +59,7 @@ const propertiesData = [
     ownerName: "Sunil Deshmukh",
     ownerContact: "+91 9833055166",
     images: [
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80"
+      "https://i.pinimg.com/736x/e7/e7/ff/e7e7ffa4a4fc431581617b0850c41164.jpg"
     ]
   },
   {
@@ -83,8 +80,9 @@ const propertiesData = [
     ownerName: "Amitabh Joshi",
     ownerContact: "+91 9811099887",
     images: [
-      "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80"
+      "https://images.nobroker.in/images/ff8081816da136be016da49f7df33cc6/ff8081816da136be016da49f7df33cc6_712293_939816_medium.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHb61BwXLRHp9Xfa1kY229EJv4y9FuUun4cilS_9PlPgsidpuu2ANcEdU&s=10",
+      "https://imagecdn.99acres.com/media1/25080/9/501609861M-1788186577532.webp"
     ]
   },
   {
@@ -105,8 +103,10 @@ const propertiesData = [
     ownerName: "Pooja Shinde",
     ownerContact: "+91 9769012345",
     images: [
-      "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT7GSw-_7j-d-T8STBh1KvQ8PiOnmrOH0ee-fvtxZKlg&s=10",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDnhU0XkvneJnBsq1mRa0MbQc_yjj6ed0TSowcHfosKDIMTrP6xVAtBmk&s=10",
+      "https://imagecdn.99acres.com/media1/39959/12/799192419M-1787108862676.webp",
+      "https://imagecdn.99acres.com/media1/38433/6/768666948M-1787401796700.webp"
     ]
   },
   {
@@ -127,8 +127,11 @@ const propertiesData = [
     ownerName: "Vikram Malhotra",
     ownerContact: "+91 9821122334",
     images: [
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=800&q=80"
+      "https://img.squareyards.com/secondaryPortal/optImages/IN_639087807775505834-100326110617617.jpg?aio=w-300;h-300;fill",
+      "https://s3.ap-south-1.amazonaws.com/prophunt.prod.fs/listings/69e295d0e2b86898b8f3afdd/images/img0.webp",
+      "https://imagecdn.99acres.com/media1/36759/13/735193516M-1774934860038.webp",
+      "https://images.nobroker.in/images/8aa9b0599f98314a019f988cf9a24954/8aa9b0599f98314a019f988cf9a24954_7673_208283_medium.jpg",
+      "https://imagecdn.99acres.com/media1/41228/19/824579577M-1787466574110.webp"
     ]
   },
   {
@@ -149,8 +152,13 @@ const propertiesData = [
     ownerName: "Rajesh Sharma",
     ownerContact: "+91 9820123456",
     images: [
-      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+      "https://images.nobroker.in/images/8aa992b49fb74995019fb7c138ad53eb/8aa992b49fb74995019fb7c138ad53eb_678165_210293_medium.jpg",
+      "https://images.nobroker.in/images/8aa9ba2b9ec68ce3019ec70773f61f36/8aa9ba2b9ec68ce3019ec70773f61f36_41260_732348_medium.jpg",
+      "https://imagecdn.99acres.com/media1/36759/13/735193516M-1774934860038.webp",
+      "https://images.nobroker.in/images/8aa9b0599f98314a019f988cf9a24954/8aa9b0599f98314a019f988cf9a24954_7673_208283_medium.jpg",
+      "https://imagecdn.99acres.com/media1/41228/19/824579577M-1787466574110.webp",
+      "https://imagecdn.99acres.com/media1/38433/6/768666948M-1787401796700.webp"
+
     ]
   },
   {
@@ -171,8 +179,7 @@ const propertiesData = [
     ownerName: "Sanjay Raut",
     ownerContact: "+91 9822001122",
     images: [
-      "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80"
+      "https://images.nobroker.in/images/8aa9a9b6a0037b6801a003c419d4259b/8aa9a9b6a0037b6801a003c419d4259b_75094_26384_medium.jpg"
     ]
   },
   {

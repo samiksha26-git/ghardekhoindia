@@ -4,6 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ghar Dekho India - Dashboard</title>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- Auth Guard Script (Runs immediately) -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaSOEh0-Tbu7Fr1NjjCFZ4WLplhsfjYD4",
+            authDomain: "ghardekho-india.firebaseapp.com",
+            projectId: "ghardekho-india",
+            storageBucket: "ghardekho-india.firebasestorage.app",
+            messagingSenderId: "955798868041",
+            appId: "1:955798868041:web:63ccdb60668da5faa66f98",
+            measurementId: "G-5BN4JGBPV5"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
+        // Force sign up / login guard
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.replace('login.html');
+            }
+        });
+    </script>
+
     <style>
         * {
             margin: 0;
@@ -223,26 +253,43 @@
             transform: translateY(0);
         }
 
-        /* Property Listings Section */
-        .section-container {
-            padding: 50px 8%;
+        /* Quick Search Results Section */
+        .search-results-section {
+            padding: 40px 8%;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .section-title {
-            font-size: 24px;
+            font-size: 22px;
             color: #0f2043;
-            margin-bottom: 6px;
         }
 
-        .section-subtitle {
+        .view-more-btn {
+            background-color: #166088;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
             font-size: 14px;
-            color: #666;
-            margin-bottom: 24px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .view-more-btn:hover {
+            background-color: #0f2043;
         }
 
         .property-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 24px;
         }
 
@@ -250,24 +297,20 @@
             background: #ffffff;
             border-radius: 12px;
             overflow: hidden;
+            border: 1px solid #eee;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .property-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
         }
 
         .property-img {
             width: 100%;
             height: 180px;
             object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .property-card:hover .property-img {
-            transform: scale(1.05);
         }
 
         .property-info {
@@ -279,12 +322,6 @@
             font-weight: 700;
             color: #166088;
             margin-bottom: 4px;
-        }
-
-        .price span {
-            font-size: 12px;
-            color: #777;
-            font-weight: normal;
         }
 
         .property-title {
@@ -300,25 +337,12 @@
             margin-bottom: 14px;
         }
 
-        .view-btn {
-            display: block;
-            width: 100%;
+        .no-results {
             text-align: center;
-            padding: 10px;
-            background-color: #f4f7f6;
-            color: #166088;
-            border: 1px solid #166088;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .view-btn:hover {
-            background-color: #166088;
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(22, 96, 136, 0.2);
+            padding: 30px;
+            color: #777;
+            font-size: 15px;
+            grid-column: 1 / -1;
         }
 
         /* Features Section (Flash Cards) */
@@ -537,6 +561,11 @@
                 width: 100%;
                 margin-top: 8px;
             }
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
         }
     </style>
 </head>
@@ -552,7 +581,7 @@
             <a href="listing.html" class="nav-btn">Listing</a>
             <a href="wishlist.html" class="nav-btn">Wishlist</a>
             <button class="nav-btn" onclick="toggleCalc()">Affordability Calculator</button>
-            <a href="login.html" class="nav-btn logout">Logout</a>
+            <button class="nav-btn logout" onclick="handleLogout()">Logout</button>
         </nav>
     </header>
 
@@ -563,26 +592,38 @@
         <form class="search-box" onsubmit="handleSearch(event)">
             <div class="search-input-group">
                 <label for="city">City</label>
-                <input type="text" id="city" placeholder="e.g., Mumbai, Delhi, Bangalore" required>
+                <input type="text" id="city" placeholder="e.g., Mumbai, Delhi, Bangalore" oninput="filterPropertiesLive()">
             </div>
             <div class="search-input-group">
                 <label for="locality">Locality / Landmark</label>
-                <input type="text" id="locality" placeholder="e.g., Andheri West, Whitefield">
+                <input type="text" id="locality" placeholder="e.g., Andheri West, Whitefield" oninput="filterPropertiesLive()">
             </div>
             <div class="search-input-group">
                 <label for="bhk">Property Type</label>
-                <select id="bhk">
+                <select id="bhk" onchange="filterPropertiesLive()">
                     <option value="any">All BHK Types</option>
                     <option value="PG">PG</option>
-                    <option value="1bhk">1 BHK</option>
-                    <option value="2bhk">2 BHK</option>
-                    <option value="3bhk">3 BHK</option>
-                    <option value="4bhk">4 BHK</option>
+                    <option value="1 BHK">1 BHK</option>
+                    <option value="2 BHK">2 BHK</option>
+                    <option value="3 BHK">3 BHK</option>
+                    <option value="4 BHK">4 BHK</option>
                     <option value="Villa">Villa</option>
                 </select>
             </div>
             <button type="submit" class="search-btn">Search</button>
         </form>
+    </section>
+
+    <!-- Instant Search Results (Displayed directly on Index Page) -->
+    <section class="search-results-section" id="resultsSection">
+        <div class="results-header">
+            <h2 class="section-title" id="resultsTitle">Quick Available Homes</h2>
+            <a href="listing.html" class="view-more-btn">View All Listings &rarr;</a>
+        </div>
+
+        <div class="property-grid" id="propertyContainer">
+            <!-- Dynamic search results populated by JavaScript -->
+        </div>
     </section>
 
     <section class="features-section">
@@ -643,15 +684,81 @@
     </div>
 
     <footer>
-        <p><span>Ghar Dekho India</span>.| "Jaha har ghar lage apana."</p>
+        <p><span>Ghar Dekho India</span> | "Jaha har ghar lage apana."</p>
     </footer>
 
     <script>
+        // Sample Property Database for Instant Search
+        const sampleProperties = [
+            { id: 1, title: "Modern 2 BHK Apartment", city: "Mumbai", locality: "Andheri West", bhk: "2 BHK", price: "₹35,000/mo", img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=500&q=80" },
+            { id: 2, title: "Luxury 3 BHK Flat", city: "Bangalore", locality: "Whitefield", bhk: "3 BHK", price: "₹45,000/mo", img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=500&q=80" },
+            { id: 3, title: "Cozy 1 BHK Studio", city: "Delhi", locality: "Hauz Khas", bhk: "1 BHK", price: "₹20,000/mo", img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=500&q=80" },
+            { id: 4, title: "Spacious Independent Villa", city: "Hyderabad", locality: "Gachibowli", bhk: "Villa", price: "₹75,000/mo", img: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=500&q=80" },
+            { id: 5, title: "Affordable PG for Students", city: "Pune", locality: "Viman Nagar", bhk: "PG", price: "₹8,500/mo", img: "https://images.unsplash.com/photo-1555854877-bab0e564b8d5?auto=format&fit=crop&w=500&q=80" },
+            { id: 6, title: "Premium 2 BHK Condo", city: "Delhi", locality: "Dwarka", bhk: "2 BHK", price: "₹28,000/mo", img: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=500&q=80" }
+        ];
+
+        // Render properties immediately on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            renderProperties(sampleProperties);
+        });
+
+        function renderProperties(list) {
+            const container = document.getElementById('propertyContainer');
+            container.innerHTML = '';
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="no-results">No matching properties found for your current search. Click "View All Listings" to browse all options!</div>`;
+                return;
+            }
+
+            list.forEach(prop => {
+                const card = `
+                    <div class="property-card">
+                        <img src="${prop.img}" alt="${prop.title}" class="property-img">
+                        <div class="property-info">
+                            <div class="price">${prop.price}</div>
+                            <div class="property-title">${prop.title}</div>
+                            <div class="location">📍 ${prop.locality}, ${prop.city} (${prop.bhk})</div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        // Live filtering function (triggers on typing/selecting)
+        function filterPropertiesLive() {
+            const cityInput = document.getElementById('city').value.toLowerCase().trim();
+            const localityInput = document.getElementById('locality').value.toLowerCase().trim();
+            const bhkInput = document.getElementById('bhk').value;
+
+            const filtered = sampleProperties.filter(prop => {
+                const matchesCity = !cityInput || prop.city.toLowerCase().includes(cityInput);
+                const matchesLocality = !localityInput || prop.locality.toLowerCase().includes(localityInput);
+                const matchesBhk = bhkInput === 'any' || prop.bhk.toLowerCase() === bhkInput.toLowerCase();
+
+                return matchesCity && matchesLocality && matchesBhk;
+            });
+
+            document.getElementById('resultsTitle').innerText = (cityInput || localityInput) 
+                ? `Search Results for "${cityInput || localityInput}"` 
+                : "Quick Available Homes";
+
+            renderProperties(filtered);
+        }
+
         function handleSearch(event) {
             event.preventDefault();
-            const city = document.getElementById('city').value;
-            const locality = document.getElementById('locality').value;
-            alert(`Searching homes in ${city} ${locality ? 'near ' + locality : ''}...`);
+            filterPropertiesLive();
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleLogout() {
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            });
         }
 
         function toggleCalc() {

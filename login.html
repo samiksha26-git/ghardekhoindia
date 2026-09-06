@@ -423,11 +423,11 @@
         const firebaseConfig = {
         apiKey: "AIzaSyAaSOEh0-Tbu7Fr1NjjCFZ4WLplhsfjYD4",
         authDomain: "ghardekho-india.firebaseapp.com",
-         projectId: "ghardekho-india",
+        projectId: "ghardekho-india",
         storageBucket: "ghardekho-india.firebasestorage.app",
         messagingSenderId: "955798868041",
         appId: "1:955798868041:web:63ccdb60668da5faa66f98",
-         measurementId: "G-5BN4JGBPV5"
+        measurementId: "G-5BN4JGBPV5"
         };
 
         // Initialize Firebase
@@ -436,6 +436,22 @@
         }
         const auth = firebase.auth();
         const db = firebase.firestore();
+
+        // ----------------------------------------------------
+        // AUTO-REDIRECT CHECK:
+        // If user is already logged in, send directly to index.html
+        // ----------------------------------------------------
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                const storedUser = localStorage.getItem('currentUser');
+                if (storedUser) {
+                    const userData = JSON.parse(storedUser);
+                    redirectUser(userData.role);
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        });
 
         const eyeOpenSVG = `<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
         const eyeClosedSVG = `<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
@@ -475,65 +491,65 @@
         }
 
         async function handleSignup(event) {
-    event.preventDefault();
-    const submitBtn = document.getElementById('signup-btn');
-    const role = document.getElementById('signup-role').value;
-    const name = document.getElementById('signup-name').value.trim();
-    const email = document.getElementById('signup-email').value.trim().toLowerCase();
-    const password = document.getElementById('signup-password').value;
+            event.preventDefault();
+            const submitBtn = document.getElementById('signup-btn');
+            const role = document.getElementById('signup-role').value;
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim().toLowerCase();
+            const password = document.getElementById('signup-password').value;
 
-    if (!validatePassword(password)) {
-        alert('Password must be at least 8 characters long and include letters, numbers, and at least one special character (!@#$%^&*).');
-        return;
-    }
+            if (!validatePassword(password)) {
+                alert('Password must be at least 8 characters long and include letters, numbers, and at least one special character (!@#$%^&*).');
+                return;
+            }
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = "Creating Account...";
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Creating Account...";
 
-    try {
-        // 1. Create User in Firebase Auth
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+            try {
+                // 1. Create User in Firebase Auth
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
 
-        // 2. Try writing user metadata to Firestore
-        try {
-            await db.collection("users").doc(user.uid).set({
-                name: name,
-                email: email,
-                role: role,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        } catch (firestoreError) {
-            console.warn("Firestore write restricted by security rules:", firestoreError);
+                // 2. Try writing user metadata to Firestore
+                try {
+                    await db.collection("users").doc(user.uid).set({
+                        name: name,
+                        email: email,
+                        role: role,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                } catch (firestoreError) {
+                    console.warn("Firestore write restricted by security rules:", firestoreError);
+                }
+
+                // 3. Sign the user out immediately so they are forced to log in
+                await auth.signOut();
+                localStorage.removeItem('currentUser');
+
+                // 4. Show success message and switch to the Login form
+                alert(`Account created successfully as ${role}! Please sign in with your credentials.`);
+                toggleForms('loginForm');
+
+            } catch (error) {
+                console.error("Sign-up Error:", error);
+                
+                if (error.code === 'auth/operation-not-allowed') {
+                    alert('Sign-up Failed: Email/Password authentication is disabled in your Firebase Console.');
+                } else if (error.code === 'auth/email-already-in-use') {
+                    alert('Sign-up Failed: This email is already registered. Please sign in instead.');
+                } else if (error.code === 'auth/invalid-email') {
+                    alert('Sign-up Failed: Invalid email format.');
+                } else if (error.code === 'auth/weak-password') {
+                    alert('Sign-up Failed: Password is too weak.');
+                } else {
+                    alert('Sign Up Error: ' + error.message);
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Create Account";
+            }
         }
-
-        // 3. Sign the user out immediately so they are forced to log in
-        await auth.signOut();
-        localStorage.removeItem('currentUser');
-
-        // 4. Show success message and switch to the Login form
-        alert(`Account created successfully as ${role}! Please sign in with your credentials.`);
-        toggleForms('loginForm');
-
-    } catch (error) {
-        console.error("Sign-up Error:", error);
-        
-        if (error.code === 'auth/operation-not-allowed') {
-            alert('Sign-up Failed: Email/Password authentication is disabled in your Firebase Console.');
-        } else if (error.code === 'auth/email-already-in-use') {
-            alert('Sign-up Failed: This email is already registered. Please sign in instead.');
-        } else if (error.code === 'auth/invalid-email') {
-            alert('Sign-up Failed: Invalid email format.');
-        } else if (error.code === 'auth/weak-password') {
-            alert('Sign-up Failed: Password is too weak.');
-        } else {
-            alert('Sign Up Error: ' + error.message);
-        }
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "Create Account";
-    }
-}
 
         async function handleLogin(event) {
             event.preventDefault();
